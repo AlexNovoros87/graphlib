@@ -4,7 +4,7 @@
 #include <cmath>
 #include <string>
 #include <memory>
-
+#include "../free/freefoo.h"
 struct Point
 {
     double x, y;

@@ -13,8 +13,6 @@ CreateWaypoinsCoordinates(const std::set<std::string> &waypoints, Point center, 
     return point_coords;
 }
 
-
-
 GraphPrinterSVG::GraphPrinterSVG(Graph &source_graph)
     : source_graph_(source_graph)
 {
@@ -103,7 +101,7 @@ void GraphPrinterSVG::Init()
 {
     int n_v = static_cast<int>(source_graph_._Ways().size());
     double number_vertices = static_cast<double>(n_v);
-    double rad = number_vertices <= 10 ? 120. : number_vertices * 11;
+    double rad  = number_vertices <= 10 ? 120. *2. : number_vertices * 11;
     square_width_ = rad * 2 + diff;
     Point pnt = {square_width_ / 2., square_width_ / 2.};
     point_positions_ = CreateWaypoinsCoordinates(source_graph_._Ways(), pnt, rad);

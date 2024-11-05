@@ -37,9 +37,16 @@ NamedLine::NamedLine(Point from, Point to, double weigth)
     : from_(from), to_(to)
 {
     Point mid = MidPoint(from, to);
-    mid.x += 3.;
-    mid.y -= 3.;
-    text_line_ = std::make_shared<Text>(DoubleToStr(weigth), std::move(mid));
+    std::string str = DoubleToStr(weigth);
+    if(!IsLessDouble(to.y , from.y)){
+        mid.y +=5.;
+        str+= 'U';
+    }
+    else if(IsLessDouble(to.y , from.y)) {
+        mid.y -=5.;
+        str += 'D';
+    }
+   text_line_ = std::make_shared<Text>( str, std::move(mid));
 };
 
 std::string NamedLine::MakeTextRepresentation() const
