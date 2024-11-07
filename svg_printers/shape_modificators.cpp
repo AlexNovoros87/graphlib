@@ -17,20 +17,20 @@ void ModifyText(Text &txt, SVGTextPrint &conf_db)
 
 void ModifyNamedLine(NamedLine &ln, SVGNamedLinePrint &conf_db)
 {
-    ModifyText(*ln.GetLineText(), conf_db);
-    ln.ChangeStrokeColour(conf_db.line_stroke_color)
+    ModifyText(*ln.GetText(), conf_db);
+    ln.GetLine()->ChangeStrokeColour(conf_db.line_stroke_color)
         .ChangeFillColour(conf_db.line_fill);
 };
 
 void ModifyNamedArrow(NamedArrow &arw, SVGArrowPrint &conf_db)
 {
-    ModifyNamedLine(*arw.Getline(), conf_db);
+    ModifyNamedLine( arw , conf_db);
     arw.GetTriangle()->ChangeStrokeColour(conf_db.triangle_stroke_color);
     arw.GetTriangle()->ChangeFillColour(conf_db.triangle_fill);
 }
 
 void ModifyNamedCircle(NamedCircle &cir, SVGNamedCirclePrint &conf_db)
 {
-    ModifyCircle(cir, conf_db);
-    ModifyText(*cir.GetTextLink(), conf_db);
+    ModifyCircle(*cir.GetCircle() , conf_db);
+    ModifyText(*cir.GetText(), conf_db);
 }

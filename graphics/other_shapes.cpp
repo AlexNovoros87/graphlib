@@ -18,9 +18,9 @@ std::string Triangle::ConstructStringRepresentation() const
 };
 
 //////////////////////
-////NAMED_LINE
+////LINE
 /////////////////////
-std::string NamedLine::MakeLineRepresentation() const
+std::string Line::ConstructStringRepresentation() const
 {
     // <line x1="10" y1="10" x2="80" y2="80" stroke="yellow" />
     std::string tmp;
@@ -33,8 +33,11 @@ std::string NamedLine::MakeLineRepresentation() const
     return tmp;
 }
 
+//////////////////////
+////NAMED_LINE
+/////////////////////
+
 NamedLine::NamedLine(Point from, Point to, double weigth)
-    : from_(from), to_(to)
 {
     Point mid = MidPoint(from, to);
     std::string str = DoubleToStr(weigth);
@@ -46,58 +49,31 @@ NamedLine::NamedLine(Point from, Point to, double weigth)
         mid.y -=5.;
         str += 'D';
     }
-   text_line_ = std::make_shared<Text>( str, std::move(mid));
+    text_ = std::make_shared<Text>( str, std::move(mid));
+    line_ = std::make_shared<Line>(std::move(from),std::move(to));
 };
 
-std::string NamedLine::MakeTextRepresentation() const
+std::shared_ptr<Text> NamedLine::GetText()
 {
-    return (*text_line_).ConstructStringRepresentation();
+    return text_;
 }
 
-std::string NamedLine::ConstructStringRepresentation() const
-{
-    std::string tmp;
-    tmp.append(MakeLineRepresentation())
-        .append(MakeTextRepresentation());
-    return tmp;
-}
-
-std::shared_ptr<Text> NamedLine::GetLineText()
-{
-    return text_line_;
-}
+std::shared_ptr<Line> NamedLine::GetLine() {
+    return line_ ;
+};
 ///////////////////
 /// NAMED ARROW
 //////////////////
-NamedArrow::NamedArrow(Point from, Point to, double weigth)
+NamedArrow::NamedArrow(Point from, Point to, double weigth) : NamedLine(from, to, weigth)
 {
-    line_ = std::make_shared<NamedLine>(from, to, weigth);
-
     std::pair<Point, Point> perpendicularpoints = GetPerpendicularLine(from, to, 7);
     triangle_ = std::make_shared<Triangle>(
         std::move(to), std::move(perpendicularpoints.first),
         std::move(perpendicularpoints.second));
 };
 
-std::string NamedArrow::ConstructStringRepresentation() const
-{
-    std::string tmp;
-    tmp.append((*line_).MakeLineRepresentation());
-    tmp.append((*triangle_).ConstructStringRepresentation());
-    tmp.append((*line_).MakeTextRepresentation());
-    return tmp;
-};
-
-std::shared_ptr<NamedLine> NamedArrow::Getline()
-{
-    return line_;
-};
 std::shared_ptr<Triangle> NamedArrow::GetTriangle()
 {
     return triangle_;
 }
 
-std::shared_ptr<Text> NamedArrow::GetLineText()
-{
-    return line_->GetLineText();
-}

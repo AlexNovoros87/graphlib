@@ -38,14 +38,15 @@ public:
 
 };
 
-class NamedCircle : public Circle
+class NamedCircle 
 {
 private:
+     std::shared_ptr<Circle> circle_;
     std::shared_ptr<Text> text_;
 public:
     NamedCircle(Point center, double radius, std::string name);
-    std::string ConstructStringRepresentation() const override;
-    std::shared_ptr<Text> GetTextLink() const;
+    std::shared_ptr<Text> GetText() const;
+    std::shared_ptr<Circle> GetCircle() const;
 };
 
 class Triangle : public Shape, public Drawable
@@ -60,31 +61,37 @@ public:
     std::string ConstructStringRepresentation() const override;
 };
 
-class NamedLine : public Shape, public Drawable
+
+class Line : public Shape, public Drawable
 {
 protected:
     Point from_;
     Point to_;
-    std::shared_ptr<Text> text_line_;
-
 public:
-    std::string MakeLineRepresentation() const;
-    NamedLine(Point from, Point to, double weigth);
-    std::string MakeTextRepresentation() const;
+   
+    Line(Point from, Point to) : from_(from),to_(to){};
     std::string ConstructStringRepresentation() const override;
-    std::shared_ptr<Text> GetLineText();
 };
 
-class NamedArrow : public Drawable
+
+class NamedLine 
+{
+protected:
+    std::shared_ptr<Line> line_;
+    std::shared_ptr<Text> text_;
+
+public:
+    NamedLine(Point from, Point to, double weigth);
+    std::shared_ptr<Text> GetText();
+    std::shared_ptr<Line> GetLine();
+
+};
+
+class NamedArrow : public NamedLine
 {
 public:
     NamedArrow(Point from, Point to, double weigth);
-    virtual std::string ConstructStringRepresentation() const override;
-    std::shared_ptr<NamedLine> Getline();
     std::shared_ptr<Triangle> GetTriangle();
-    std::shared_ptr<Text> GetLineText();
-
 private:
-    std::shared_ptr<NamedLine> line_;
     std::shared_ptr<Triangle> triangle_;
 };

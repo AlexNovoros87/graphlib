@@ -29,26 +29,25 @@ double Circle::GetRadius() const { return radius_; }
 //////////////////////
 // NAMED CIRCLE
 /////////////////////
-std::string NamedCircle::ConstructStringRepresentation() const
-{
-    std::string tmp;
-    tmp.append(SvgCircleRepresentation());
-    tmp.append((*text_).ConstructStringRepresentation());
-    return tmp;
-}
 
 NamedCircle::NamedCircle(Point center, double radius, std::string name)
-    : Circle(center, radius)
+
 {
     Point p = center;
-    p.y -= radius_ + 2;
+    p.y -= (radius + 2);
     text_ = std::make_shared<Text>(name, p);
+    circle_ = std::make_shared<Circle>(center,radius);
 }
 
-std::shared_ptr<Text> NamedCircle::GetTextLink() const
+std::shared_ptr<Text> NamedCircle::GetText() const
 {
     return text_;
 }
+
+std::shared_ptr<Circle> NamedCircle::GetCircle() const
+{
+    return circle_;
+};
 
 /////////////////////////
 // TEXT

@@ -3,75 +3,56 @@
 #include "../routers/routers.h"
 #include "shape_modificators.h"
 
-std::unordered_map<const std::string *, Point, Hasher>
-CreateWaypoinsCoordinates(const std::set<std::string> &waypoints, Point center, double radius);
+using PointPositionsMap = std::unordered_map<const std::string *, Point, Hasher>;
 
+template <template <typename, typename> class Container, typename Drawable>
+void PrintDrawable(const Container<Drawable, std::allocator<Drawable>> &container, std::ostream &os)
+{
+    for (const auto &item : container)
+    {
+        item->Draw(os);
+    }
+}
 
-
-class GraphPrinterSVG
+class PrinterSVGbase
 {
 public:
-    GraphPrinterSVG(Graph &source_graph);
-    virtual void Draw(std::ofstream &os);
-    virtual ~GraphPrinterSVG() {};
+    PrinterSVGbase(Graph &source_graph);
+    virtual ~PrinterSVGbase() {};
 
 protected:
-    Graph &source_graph_;
-    double square_width_;
-    const double diff = 60.;
-    std::unordered_map<const std::string *, Point, Hasher> point_positions_;
-    auto &_Graph() const;
-    bool IsEdge(const std::string *from, const std::string *to) const;
-    void DrawNamedCircles(std::ostream &os) const;
-    virtual void DrawEdgesAndArcs(std::ostream &os) const;
-    void DrawEA(std::ostream &os, BoolGraph &visited) const;
+    Graph &source_graph_; //ГРАФ
+    double square_width_; //СТОРОНА КВАДРАТА ДЛЯ ПЕЧАТИ
+    const double diff = 60.;//ПОГРЕШНОСТЬ ОТСТУПА ПЕЧАТИ
+    PointPositionsMap point_positions_; //ИМЯ ВЕРШИНЫ - КООРДИНАТА НА КРУГЕ
+    auto &_Graph() const; //ПОКАЗАТЬ ГРАФ
+    bool IsEdge(const std::string *from, const std::string *to) const; //ДУГА ИЛИ РЕБРО
+    //НАРИСОВАТЬ ДУГИ И РЕБРА
+    virtual void DrawEdgesAndArcs(std::ostream &os, std::vector<std::shared_ptr<Text>> &texts) const;
+    //НАРИСОВАТЬ ДУГИ И РЕБРА
+    void DrawEA(std::ostream &os, BoolGraph &visited, std::vector<std::shared_ptr<Text>> &texts) const;
     void Init();
 };
 
-class DeikstraRoutePrinter : GraphPrinterSVG
+class PrinterSVGGraph : public PrinterSVGbase
+{
+public:
+    void Draw(std::ofstream &os);
+};
+
+class DeikstraRoutePrinter : public PrinterSVGbase
 {
 private:
-    std::shared_ptr<DeikstraRouter> router_;
-
+    std::shared_ptr<DeikstraRouter> router_; //РОУТЕР
     std::vector<NamedArrow> GetWayAndUpdateVisited(const std::string &from,
-                                                   const std::string &to, BoolGraph &visited) const {
-       auto shortestroot = router_->DeikstraWayGraphDirection(from, to);
-        std::vector<NamedArrow> way;
-        for (auto &&one_move : shortestroot)
-        {
-            const std::string *from_p = &(*source_graph_._Ways().find(one_move.from));
-            const std::string *to_p = &(*source_graph_._Ways().find(one_move.to));
-            NamedArrow arw(point_positions_.at(from_p), point_positions_.at(to_p), one_move.how_much);
-            ModifyNamedArrow(arw, GCP::deikstra_arrow_pr_);
-            way.push_back(std::move(arw));
-            visited[from_p][to_p] = true;
-            visited[to_p][from_p] = true;
-        }
-      return way;
-    };
-
-    void DrawEdgesAndArcs(std::ostream &os, const std::string &from, const std::string &to) const
-    {
-        BoolGraph visited;
-        std::vector<NamedArrow> way = GetWayAndUpdateVisited(from, to , visited);
-        DrawEA(os, visited);
-        for (auto &&waypoint : way)
-        {
-            waypoint.Draw(os);
-        }
-    };
-
+                                                   const std::string &to, BoolGraph &visited) const;
+    //НАРИСОВАТЬ ДУГИ И РЕБРА(С МАРШРУТАМИ)
+    void DrawEdgesAndArcs(std::ostream &os, const std::string &from, const std::string &to,
+                          std::vector<std::shared_ptr<Text>> &texts) const;
 public:
-    void Draw(std::ostream &os, const std::string &from, const std::string &to) const
-    {
-        os << GetMainOpenTagLine(square_width_, square_width_);
-        DrawNamedCircles(os);
-        DrawEdgesAndArcs(os, from, to);
-        os << SVGstrings::maintagclose;
-    }
-
-    DeikstraRoutePrinter(Graph &source_graph) : GraphPrinterSVG(source_graph)
-    {
-        router_ = std::make_shared<DeikstraRouter>(source_graph_);
-    };
+    //НАРИСОВАТЬ МАРШРУТ НА ГРАФЕ
+    void DrawWithGraph(std::ostream &os, const std::string &from, const std::string &to) const;
+    //НАРИСОВАТЬ ТОЛЬКО МАРШУТ
+    void DrawOnlyWay(std::ostream &os, const std::string &from, const std::string &to) const;
+    DeikstraRoutePrinter(Graph &source_graph);
 };

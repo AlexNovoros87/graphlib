@@ -47,7 +47,8 @@ class Drawable
 {
 public:
     virtual std::string ConstructStringRepresentation() const = 0;
-    virtual void Draw(std::ostream &os) const;
+    void Draw(std::ostream &os) const;
+    virtual ~Drawable(){};
 };
 
 class Shape

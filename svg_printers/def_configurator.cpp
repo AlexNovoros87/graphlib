@@ -25,7 +25,7 @@ SVGNamedLinePrint GCP::graph_line_pr_ = {"white",
 SVGArrowPrint GCP::deikstra_arrow_pr_ = {"cyan",
                                          "cyan", 1., "Arial", 10., "yellow", "yellow", 1., "yellow", "yellow", 1.};
 
-SVGArrowPrint GCP::graph_arrow_pr_ = {"white", "white", 1., "Arial", 10., "gray", "gray", 1., "gray", "gray", 1.};
+SVGArrowPrint GCP::graph_arrow_pr_ = {"white", "white", 1., "Arial", 10., "gray", "gray", 1., "gray", "orange", 1.};
 
 SVGNamedCirclePrint GCP::graph_tops_pr_ = {"black", "green", 1., "red",
                                            "red", 1., "Arial", 10.};

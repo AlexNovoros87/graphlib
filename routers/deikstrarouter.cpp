@@ -53,19 +53,20 @@ DeikstraRouter::DeikstraRouter(const Graph &graph) : source_grph_(graph) {};
 
     DeikstraTable DeikstraRouter::ConstructShortestRoutesTable(const std::string &from, const std::string &to) const
     {
-        /*1*/ std::string *now_looking_ptr = const_cast<std::string *>(CheckValidWayPointsAndLookingNowPointer(from, to));
-        if (!now_looking_ptr)
-            return {};
-
-        /*2*/ auto table = MakeCrowTableToDeikstra(from);
+        //ПРОВЕРИТЬ ВАЛИДНОСТЬ ПУНКТОВ И УСТАНОВИТЬ СЕЙЧАС РАССМАТРИВАЕМЫ УКАЗАТЕЛЬ НА НАЧАЛЬНЫЙ ПУНКТ
+        std::string *now_looking_ptr = const_cast<std::string *>(CheckValidWayPointsAndLookingNowPointer(from, to));
+        if (!now_looking_ptr) { return {};}
+        //СДЕЛАТЬ ТАБЛИЦУ МАРШУТОВ ОТ НАЧАЛА И ДО ТОЧЕК ОТКУДА ИДУТ ОТ НЕЕ НАПРАВЛЕНИЯ 
+        auto table = MakeCrowTableToDeikstra(from); 
         if (table.empty())
         {
             return {};
         }
-        /*3*/ const auto &waypoints_link = source_grph_._Ways();
-        /*4*/ std::unordered_set<const std::string *, Hasher> visited;
+         
+         const auto &waypoints_link = source_grph_._Ways(); //ССЫЛКА НА ИМЕНА ТОЧЕК ГРАФА
+         std::unordered_set<const std::string *, Hasher> visited; //ПОСЕЩЕННЫЕ ТОЧКИ
 
-        /*5*/ while (visited.size() != waypoints_link.size())
+        while (visited.size() != waypoints_link.size()) //ПОКА НЕ ПОСЕЩЕНЫ ВСЕ ТОЧКИ
         {
 
             /*6*/ const int from_ind = source_grph_.GetOrderNumWaypoint(now_looking_ptr);
