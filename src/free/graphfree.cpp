@@ -55,14 +55,14 @@ void Trim(std::string &line)
 }
 
 //! РАЗДЕЛИТЕЛЬ ПО "|"
-std::vector<std::string> SplitBy(std::string line)
+std::vector<std::string> SplitBy(std::string line , char splitsym)
 {
     std::vector<std::string> splitted;
     std::string tmp;
 
     for (int i = 0; i < line.size(); ++i)
     {
-        if (line[i] != '|')
+        if (line[i] != splitsym)
         {
             tmp += line[i];
         }
@@ -75,10 +75,6 @@ std::vector<std::string> SplitBy(std::string line)
     }
     Trim(tmp);
     splitted.push_back(std::move(tmp));
-    if (splitted.size() != 3)
-    {
-        throw std::invalid_argument("error splitting size");
-    }
     return splitted;
 }
 
@@ -124,7 +120,8 @@ bool IsEqualDouble(double one, double two){
 //! ПАРСИТ СТРОКУ И ДЕЛАЕТ СТРУКТУРУ ДЛЯ ЗАГРУЗКИ ДАННЫХ В ГРАФ
 GraphDirection MakeOneDir(std::string line)
 {
-    std::vector<std::string> ready_params = SplitBy(std::move(line));
+    std::vector<std::string> ready_params = SplitBy(std::move(line), '|');
+    if(ready_params.size() != 3) {return {};}
     size_t stod;
     double len = std::stod(ready_params[2], &stod);
     if (stod != ready_params[2].size())
@@ -145,6 +142,8 @@ std::ostream& operator <<(std::ostream& ofs, const GraphDirection& gr){
     ofs << "The way from: "<<gr.from << " to: "<< gr.to <<" "<< " is: "<< gr.how_much;  
   return ofs; 
 }
+
+
 
 //! ОТЛАДОЧНАЯ ФУНКЦИЯ
 void ALLGOOD(){

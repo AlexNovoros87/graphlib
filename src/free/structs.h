@@ -4,7 +4,7 @@
  * \file structs.h
  * \brief Описание классов и структур
  * \details Описывает структуры нужные для работы графов,
- * содержит псевдонимы типов ,  
+ * содержит псевдонимы типов ,
  */
 
 #include <string>
@@ -19,9 +19,9 @@
 #include <set>
 #include <algorithm>
 #include <optional>
+#include <sstream>
 
 #define endl__ std::cout << std::endl;
-
 
 /**
  * \struct GraphDirection
@@ -39,7 +39,6 @@ struct GraphDirection
     double how_much;
 };
 
-
 /**
  * \brief Хешер
  * \details   Хешер, по которому будут храниться
@@ -49,9 +48,9 @@ struct Hasher
 {
     /**
      * \brief Непосредственно сама хеш-функция
-     * \param str Указатель для которого будет вычислена 
+     * \param str Указатель для которого будет вычислена
      * хеш-функция
-     * \return Число, котоое будет являться хешем 
+     * \return Число, котоое будет являться хешем
      * \exception Нн выбрасывает исключений
      */
     size_t operator()(const std::string *str) const
@@ -99,8 +98,9 @@ using WaysCollection = std::unordered_map<const std::string *, UnorderedTable, H
 using DeikstraTable = std::unordered_map<const std::string *, RoutePair, Hasher>;
 
 using UnorderedBoolTable = std::unordered_map<const std::string *, bool, Hasher>;
-using BoolGraph = std::unordered_map<const std::string *, UnorderedBoolTable , Hasher>;
+using BoolGraph = std::unordered_map<const std::string *, UnorderedBoolTable, Hasher>;
 
 using bool_matrix = std::vector<std::vector<bool>>;
 using double_matrix = std::vector<std::vector<double>>;
 using const_str_ptr_matrix = std::vector<std::vector<const std::string *>>;
+using char_matrix = std::vector<std::vector<char>>;

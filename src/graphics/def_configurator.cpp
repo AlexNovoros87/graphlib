@@ -202,6 +202,8 @@ void ReportErrorLine(const std::string &param, int where)
 //ВЫПОЛНИТЬ КОМАНДУ ПО ИЗМЕНЕНИЮ СТИЛЯ
 void TryExecuteCommand(std::vector<std::string> &&params, int line)
 {
+    if(params.size() != 3) {return;}
+    
     /*provide_conf = false ОЗНАЧАЕТ ЧТО ProvideDefConfigurarorLampdas();
      НЕ ЗАПУСКАЛАСЬ И static СОХРАНЯЕТ СОСТОЯНИЕ TRUE ПОСЛЕ ПЕРВОГО ЗАПУСКА*/
     static bool provide_conf = false;
@@ -265,7 +267,9 @@ void UpdateSVGPrintDefaults(std::filesystem::path pth)
         if(tmp.empty() || tmp[0] == '#') {continue;}
         //ПЫТАЕМСЯ ВЫПОЛНИТЬ КОМАНДУ, ПРИ ЭТОМ РАСПАРСИВ СТРОКУ 
         //МЕТОДОМ SplitBy 
-        TryExecuteCommand(SplitBy(tmp), line_counter);
+        
+        
+        TryExecuteCommand(SplitBy(tmp, '|'), line_counter);
         tmp.clear();
     }
 };

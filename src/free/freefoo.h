@@ -10,8 +10,8 @@
 bool IsTrimmerSymb(char ch);
 //! СПЕРЕДИ И СЗАДИ СТРОКИ УБИРАЕТ ЛИШНИЕ ПРОБЕЛЫ
 void Trim(std::string &line);
-//! ДРОБИТ СТРОКУ ПО ЗАНАКУ "|"
-std::vector<std::string> SplitBy(std::string line);
+//! ДРОБИТ СТРОКУ ПО ЗАНАКУ 
+std::vector<std::string> SplitBy(std::string line , char splitsym);
 //! ВОЗВРАЩАЕТ МАТРИЦУ size x size СОСТОЯЩЕЙ из infinity()
 double_matrix GetCrowlDoubleMaxMatrix(int size);
 //!СОЗДАЕТ МАТРИЦУ size x size, bool , равных false
@@ -24,6 +24,7 @@ std::ofstream CreateFileStream(const std::filesystem::path &pth, bool trunc);
 const_str_ptr_matrix GetStringPointersMatrix(int size);
 //! ВЫВОДИТ СТУКТУРУ GraphDirection В НУЖНЫЙ ПОТОК
 std::ostream &operator<<(std::ostream &ofs, const GraphDirection &gr);
+
 //! ЯВЛЯЕТСЯ ЛИ ДАННОЕ ЧИСЛО МАКСИМАЛЬНЫМ DOUBLE
 bool IsMaxDouble(double db);
 //! ЯВЛЯЕТСЯ ЛИ ОДНО dOUBLE МЕНЬШЕ ДРУГОГО
@@ -67,5 +68,20 @@ auto GetPointerIfHasContainer(int order, const Container& container)
    std::advance(it, order); 
    return &*it;
 } 
+
+template<typename Container>
+void PrintContainer(const Container& container){
+    for(auto && el : container){
+        std::cout<<el <<" ";
+    }
+};
+
+template<typename Matrix>
+void PrintMatrix(const Matrix& matrix){
+    for(auto && container : matrix){
+        PrintContainer(container);
+        std::cout<<std::endl;
+    }
+}
 
 

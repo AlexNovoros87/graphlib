@@ -37,9 +37,11 @@ target_link_libraries(console_gr_wgh_ach PUBLIC graph)
 #БИБЛИОТЕКА ПРИНТЕРА В КОНСОЛЬ ДЕЙКСТРЫ
 add_library(console_deikstra ${CNSL_DEIKSTRA})
 target_link_libraries(console_deikstra PUBLIC graph deikstrart)
+
+add_library(AStar ${ASTAR})
 #----------------------------------------------------------------
 add_executable(grpx src/main.cpp)
-target_link_libraries(grpx PUBLIC achiveabler svg_printers console_gr_wgh_ach)
+target_link_libraries(grpx PUBLIC achiveabler svg_printers console_gr_wgh_ach AStar)
 
 
 set(WAY_TO_INSTALL F:/COMPILESOFT/CUSTOMLIBS)
