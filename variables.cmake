@@ -52,6 +52,17 @@ src/console_printers/deikstra_printer.h
 src/console_printers/deikstra_printer.cpp
 )
 
+
+set(ASTAR 
+  src/free/freefoo.h
+  src/AStar/astardeclare.h
+  src/AStar/astarsupport.h
+  src/AStar/astarfoo.cpp
+  src/AStar/astarmap.cpp
+  src/AStar/designastar.cpp
+          
+)
+
 set(INSTALL_TARGETS
 graph
 achiveabler
@@ -61,9 +72,12 @@ graphics
 svg_printers
 console_gr_wgh_ach
 console_deikstra
+AStar
 )
 
 set(LIB_HEADERS
+src/AStar/astardeclare.h
+src/AStar/astarsupport.h
 src//free/structs.h
 src/free/freefoo.h
 src/graph/graph.h
@@ -78,3 +92,5 @@ src/svg_printers/svg_printers.h
 src/console_printers/graph_achive_border.h
 src/console_printers/deikstra_printer.h
 )
+
+
