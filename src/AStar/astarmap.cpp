@@ -50,28 +50,27 @@ const char_matrix &AStarMap::GetMapMatrix() const
 };
 
 
-
-
-std::vector<MatrixPosition> AStarMap::GetPossibleSteps(MatrixPosition pos) const
+std::vector<Coordinates_Direction> AStarMap::GetPossibleSteps(MatrixPosition pos) const
 {
-    std::vector<MatrixPosition> positions;
+    std::vector<Coordinates_Direction> positions;
     if (!IsPossibleToStandOn(pos))
     {
         return positions;
     }
 
-    for (auto &&mod : AStarConsts::turns_modificators_)
+    for (auto && direction_pair : AStarConsts::different_chars)
     {
+        const MatrixPosition& mod = direction_pair.second.difference;  
         MatrixPosition turn = pos + mod;
         if (IsPossibleToStandOn(turn))
         {
-            positions.push_back(turn);
+            positions.push_back({turn, direction_pair.first});
         }
     }
     return positions;
 }
 
-std::vector<MatrixPosition> AStarMap::GetPossibleSteps(int row, int col) const
+std::vector<Coordinates_Direction> AStarMap::GetPossibleSteps(int row, int col) const
 {
     return GetPossibleSteps({row, col});
 };

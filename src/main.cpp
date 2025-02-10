@@ -12,11 +12,7 @@ int main(){
  auto& map = ast.GetMap();
  PrintMatrix(map.GetMapMatrix());
 
-
- for(auto && i : map.GetPossibleSteps({0,0})){
-         std::cout<<i<<std::endl;
- }
- 
+  ast.GetWay({5,0},{5,6});
 
 
  

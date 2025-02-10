@@ -57,9 +57,11 @@ set(ASTAR
   src/free/freefoo.h
   src/AStar/astardeclare.h
   src/AStar/astarsupport.h
+  src/AStar/structs.h
   src/AStar/astarfoo.cpp
   src/AStar/astarmap.cpp
   src/AStar/designastar.cpp
+  src/AStar/astar.cpp
           
 )
 
@@ -75,9 +77,16 @@ console_deikstra
 AStar
 )
 
+
+
+
+
+
+
 set(LIB_HEADERS
 src/AStar/astardeclare.h
 src/AStar/astarsupport.h
+src/AStar/structs.h
 src//free/structs.h
 src/free/freefoo.h
 src/graph/graph.h

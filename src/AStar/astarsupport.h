@@ -1,102 +1,6 @@
 #pragma once
-#include "../free/freefoo.h"
+#include "structs.h"
 
-class AStar;
-/**
- *  \brief Хранит строку и столбец в матрице
- */
-struct MatrixPosition
-{
-    int row;
-    int col;
-
-    MatrixPosition operator+(const MatrixPosition &rhs)
-    {
-        return {row + rhs.row, col + rhs.col};
-    }
-
-    MatrixPosition operator-(const MatrixPosition &rhs)
-    {
-        return {row - rhs.row, col - rhs.col};
-    }
-
-    bool operator==(const MatrixPosition &rhs) const
-    {
-        return ((row == rhs.row) && (col == rhs.col));
-    }
-};
-
-//! ВЫВОДИТ СТУКТУРУ MatrixPosition В НУЖНЫЙ ПОТОК
-std::ostream &operator<<(std::ostream &ofs, const MatrixPosition &mtrx);
-
-/**
- * \brief Хешер
- * \details   Хешер, по которому будут храниться
- * объекты string* в unordered_map и unordered_set
- */
-struct MatrixPositionHasher
-{
-    /**
-     * \brief Непосредственно сама хеш-функция
-     * \param pos Координата, для которой сделать хеш
-     * \return Число, котоое будет являться хешем
-     * \exception Нн выбрасывает исключений
-     */
-    size_t operator()(const MatrixPosition &pos) const
-    {
-        size_t h1 = std::hash<int>()(pos.row);
-        size_t h2 = std::hash<int>()(pos.col);
-        return h1 ^ (h2 << 1);
-    };
-};
-
-/**
- * @brief Лимиты минимум и максимум для двух пар параметров
- * @details  Оюычно используется для координат
- */
-template <typename T>
-struct Limits
-{
-    T minRW;
-    T maxRW;
-    T minCL;
-    T maxCL;
-};
-
-/**
- * @brief Служебная вспомогательная структура
- */
-struct AStarConsts
-{
-    /**
-     * @brief
-     */
-    const static std::unordered_map<MatrixPosition, char, MatrixPositionHasher> different_chars;
-    /**
-     * @brief Модификаторы ходов для поиска возможных ходов
-     */
-    const static std::vector<MatrixPosition> turns_modificators_;
-    /**
-     * @brief Возвращает две пары чимел минимально и максимально
-     * возможных для данного типа Т
-     */
-    template <typename T>
-    static Limits<T> GetTotalLimits()
-    {
-        T minRW = std::numeric_limits<T>::max();
-        T minCL = minRW;
-        T maxRW = std::numeric_limits<T>::min();
-        T maxCL = maxRW;
-        return {minRW, maxRW, minCL, maxCL};
-    }
-};
-
-/**
- * @brief Возвращает самые максимальные и минимальные координаты из коллекцции координат
- */
-Limits<int> GetTurnLims(const std::vector<MatrixPosition> &way);
-
-constexpr static char NON_AVAL_CH = '`';
 /**
  * \brief Класс, хранящий в себе параметры , необходимые для А*
  * \details Хранит в себе:
@@ -188,14 +92,14 @@ public:
      * @param pos Координаты
      * @return Все возможные ходы с данных координат
      */
-    std::vector<MatrixPosition> GetPossibleSteps(MatrixPosition pos) const;
+    std::vector<Coordinates_Direction> GetPossibleSteps(MatrixPosition pos) const;
     /**
      * @brief Получить все возможные ходы с жанной клетки
      * @param row Ряд
      * @param col Столбец
      * @return Все возможные ходы с данных координат
      */
-    std::vector<MatrixPosition> GetPossibleSteps(int row, int col) const;
+    std::vector<Coordinates_Direction> GetPossibleSteps(int row, int col) const;
 
 private:
     friend class AStar;
@@ -204,6 +108,10 @@ private:
     AStarMap operator=(AStarMap &&rhs) = delete;
     AStarMap(const AStarMap &rhs) = delete;
     AStarMap(AStarMap &&rhs) = delete;
+
+    
+    
+   
 
     ///! Является ли символ корректным при создании строки матрицы
     bool IsCorrectSym(char ch) const;
@@ -224,6 +132,9 @@ private:
 
     ///! Карта
     char_matrix map_;
+    ///! Символ проходимости
     char is_tranparent_;
+    ///! Символ непроходимости
     char no_tranparent_;
 };
+
