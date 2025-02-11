@@ -23,10 +23,16 @@ public:
      */
     void PrintParametrs() const;
 
+    bool AllowNearBlock() const {
+        return AllowNearBlock_;
+    }
+
 private:
     std::unordered_map<std::string, std::function<void(const std::string &str)>> params_setter_;
     char is_transparent_ = 'Y';
     char no_transparent_ = 'N';
+    //Запрет среза рядом с непроходиой стеной
+    bool AllowNearBlock_ = false;
 
     ConfigAStar operator=(const ConfigAStar &rhs) = delete;
     ConfigAStar operator=(ConfigAStar &&rhs) = delete;
@@ -34,7 +40,7 @@ private:
     ConfigAStar(ConfigAStar &&rhs) = delete;
     /**
      * \brief Конструктор
-     * \details принимает на вход файл с конфигурациями и файл с
+     * \details принимает на вход файл с конфигурациями
      */
     explicit ConfigAStar(std::filesystem::path configs_way);
     /**
@@ -50,6 +56,8 @@ private:
      */
     void LoadParamsSetter();
     friend class AStar;
+
+    
 };
 
 /**
@@ -103,15 +111,11 @@ public:
 
 private:
     friend class AStar;
-    AStarMap(const std::filesystem::path &pth, char tr, char ntr);
+    AStarMap(const ConfigAStar& cfg, const std::filesystem::path &pth);
     AStarMap &operator=(const AStarMap &rhs) = delete;
     AStarMap operator=(AStarMap &&rhs) = delete;
     AStarMap(const AStarMap &rhs) = delete;
     AStarMap(AStarMap &&rhs) = delete;
-
-    
-    
-   
 
     ///! Является ли символ корректным при создании строки матрицы
     bool IsCorrectSym(char ch) const;
@@ -123,6 +127,8 @@ private:
     ///! Коректна ли позиция матрицы??
     bool IsCorrectMapPosition(int row, int col) const;
     bool IsCorrectMapPosition(MatrixPosition pos) const;
+
+    bool AcceptAllowNearBlock(MatrixPosition from, Direction dir) const;
     /*Построить карту из файла:
        ...........................
             .....ооооо........
@@ -130,11 +136,9 @@ private:
     */
     void BuildMap(const std::filesystem::path &pth);
 
+    const ConfigAStar& config_;
     ///! Карта
     char_matrix map_;
-    ///! Символ проходимости
-    char is_tranparent_;
-    ///! Символ непроходимости
-    char no_tranparent_;
+    
 };
 

@@ -12,7 +12,14 @@ int main(){
  auto& map = ast.GetMap();
  PrintMatrix(map.GetMapMatrix());
 
-  ast.GetWay({5,0},{5,6});
+ for (auto i :  ast.GetWay({5,0},{5,6})){
+   std::cout<<i<<std::endl;
+ };
+
+
+ std::cout<< std::boolalpha << ast.GetConfig().AllowNearBlock();
+
+  
 
 
  

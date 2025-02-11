@@ -1,13 +1,13 @@
 #pragma once
 #include "astarsupport.h"
-#include <cassert>
+
 
 class AStar
 {
 private:
+   using OpenListIterator = std::unordered_set<PathElement, PathElementHasher>::const_iterator;
    
-   
-   std::unordered_set<PathElement, PathElementHasher>::const_iterator 
+   OpenListIterator 
    FindMinStep(const std::unordered_set<PathElement, PathElementHasher> &open_list) const;
 
    /// @brief Создает список клетое, доступных для посещения 
@@ -34,7 +34,8 @@ private:
    /// @param candidates Кандидаты для обновления
    /// @param open_list Открытый лист
    void UpdateOpenList(std::vector<PathElement> &candidates,
-                       std::unordered_set<PathElement, PathElementHasher> &open_list) const;
+                       std::unordered_set<PathElement, PathElementHasher> &open_list,
+                       std::unordered_map<MatrixPosition, MatrixPosition, MatrixPositionHasher>& adressbook) const;
 
 public:
    /// @brief Конструктор
@@ -55,6 +56,7 @@ public:
    std::vector<MatrixPosition> GetWay(MatrixPosition from, MatrixPosition to) const;
 
 private:
-   AStarMap *map_ = nullptr;
    ConfigAStar cfg_;
+   AStarMap *map_ = nullptr;
+   
 };

@@ -51,7 +51,7 @@ std::ostream &operator<<(std::ostream &ofs, const PathElement &pth)
     ofs << "Current: " << pth.current_pos << std::endl;
     ofs << "Parent: " << pth.comed_from << std::endl;
     ofs << "O_D Status: " << pth.o_d << std::endl;
-    ofs << "Manhattan to target: " << pth.manchetten << std::endl;
+    ofs << "Manhattan to target: " << pth.evristica << std::endl;
     return ofs;
 };
 
@@ -126,9 +126,9 @@ Limits<int> GetTurnLims(const std::vector<MatrixPosition> &way)
     return limits;
 }
 
-int AbsoluteDiffCages(MatrixPosition coords1, MatrixPosition coords2)
+int Evristica(MatrixPosition coords1, MatrixPosition coords2)
 {
-    return (std::abs(coords1.row - coords2.row) + std::abs(coords1.col - coords2.col));
+    return (std::abs(coords1.row - coords2.row) + std::abs(coords1.col - coords2.col)) * 10;
 };
 
 Direction InverseDirection(Direction dir)
@@ -161,4 +161,19 @@ Direction InverseDirection(Direction dir)
         break;
     }
     return Direction::STAY;
+};
+
+int PosititionCoefficient(const MatrixPosition &child, const MatrixPosition par)
+{
+    if(child == par){return 0;}
+    // Проверяем что клетки дейсвительно соседние
+    assert(std::abs(par.col - child.col) >= 0 && std::abs(par.col - child.col) <= 1);
+    assert(std::abs(par.row - child.row) >= 0 && std::abs(par.row - child.row) <= 1);
+    // Еслм столбец или ряд равны - расположение ортогональное
+    if (child.row == par.row || child.col == par.col)
+    {
+        return AStarConsts::ORTOGONAL_MOD;
+    }
+    // иначе диагональное
+    return AStarConsts::DIAGONAL_MOD;
 };

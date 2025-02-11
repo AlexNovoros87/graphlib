@@ -1,5 +1,6 @@
 #pragma once
 #include "../free/freefoo.h"
+#include <cassert>
 
 class AStar;
 /**
@@ -137,13 +138,13 @@ struct PathElement
     // Ортогональное или диагональное расположение(индекс)
     int o_d;
     // Расстояние, вычисленное по "Индексу Манхеттена"
-    int manchetten;
+    int evristica;
 
     bool operator==(const PathElement &rhs) const
     {
         return ((current_pos == rhs.current_pos) |
                 (comed_from == rhs.comed_from) |
-                (o_d == rhs.o_d) | (manchetten == rhs.manchetten));
+                (o_d == rhs.o_d) | (evristica == rhs.evristica));
     }
 };
 
@@ -229,11 +230,17 @@ Limits<int> GetTurnLims(const std::vector<MatrixPosition> &way);
 /**
  * @brief Считает Манхэттонскую разницу, игнорируя диагонали и препятствия
  */
-int AbsoluteDiffCages(MatrixPosition coords1, MatrixPosition coords2);
+int Evristica(MatrixPosition coords1, MatrixPosition coords2);
 /**
  * @brief Реверсирует направление (UP --> DOWN)
  */
 Direction InverseDirection(Direction dir);
+
+/**
+ * @brief Возращает конффициент расположения между точками (ортогональный или диагональный)
+ */
+
+int PosititionCoefficient(const MatrixPosition &child, const MatrixPosition par);
 
 /////----------------------------------------------->>///
 /**
